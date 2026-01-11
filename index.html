@@ -1,96 +1,65 @@
-<!DOCTYPE html>
-<html lang="ms">
-<head>
-  <meta charset="UTF-8">
-  <title>Loading...</title>
+<script>
+  (function () {
+    emailjs.init("19sxIv6OT-I-U0fGU");
+  })();
 
-  <!-- EmailJS -->
-  <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+  function getPackage() {
+    const params = new URLSearchParams(window.location.search);
+    return params.get("pkg");
+  }
 
-  <script>
-    (function () {
-      emailjs.init("19sxIv6OT-I-U0fGU");
-    })();
+  function hasSentEmail() {
+    return localStorage.getItem("ring_email_sent") === "true";
+  }
 
-    const SPAM_LIMIT = 5 * 60 * 1000; // 5 min
+  function markEmailSent() {
+    localStorage.setItem("ring_email_sent", "true");
+  }
 
-    function getPackage() {
-      const params = new URLSearchParams(window.location.search);
-      return params.get("pkg");
+  async function getIPInfo() {
+    try {
+      const res = await fetch("https://ipapi.co/json/");
+      return await res.json();
+    } catch (e) {
+      return null;
+    }
+  }
+
+  window.onload = async function () {
+    const pkg = getPackage();
+
+    let packageName = "Unknown Package";
+    let redirectPage = "page1.html";
+
+    if (pkg === "1") {
+      packageName = "Package 1";
+      redirectPage = "page1.html";
+    } else if (pkg === "2") {
+      packageName = "Package 2";
+      redirectPage = "page2.html";
     }
 
-    function canSendEmail() {
-      const lastSent = localStorage.getItem("lastEmailTime");
-      if (!lastSent) return true;
-
-      return (Date.now() - parseInt(lastSent)) > SPAM_LIMIT;
-    }
-
-    function markEmailSent() {
-      localStorage.setItem("lastEmailTime", Date.now().toString());
-    }
-
-    async function getIPInfo() {
-      try {
-        const res = await fetch("https://ipapi.co/json/");
-        return await res.json();
-      } catch (e) {
-        return null;
-      }
-    }
-
-    window.onload = async function () {
-      const pkg = getPackage();
-
-      let packageName = "Unknown Package";
-      let redirectPage = "page1.html";
-
-      if (pkg === "1") {
-        packageName = "Package 1";
-        redirectPage = "page1.html";
-      } else if (pkg === "2") {
-        packageName = "Package 2";
-        redirectPage = "page2.html";
-      }
-
+    // 🔒 CHECK ONE-TIME ONLY
+    if (!hasSentEmail()) {
       const timestamp = new Date().toISOString();
       const ipInfo = await getIPInfo();
 
       const ip = ipInfo?.ip || "Unknown";
       const country = ipInfo?.country_name || "Unknown";
 
-      if (canSendEmail()) {
-        emailjs.send("service_fu9dcqi", "template_5jfm8nh", { 
-          package: packageName,
-          ip_address: ip,
-          country: country,
-          timestamp: timestamp
-        }).then(() => {
-          markEmailSent();
-        });
-      }
-
-      // stealth delay sikit
-      setTimeout(() => {
-        window.location.href = redirectPage;
-      }, 1500);
-    };
-  </script>
-
-  <style>
-    body {
-      background: #000;
-      color: #0f0;
-      font-family: monospace;
-      text-align: center;
-      padding-top: 120px;
+      emailjs.send("service_fu9dcqi", "template_5jfm8nh", {
+        package: packageName,
+        ip_address: ip,
+        country: country,
+        timestamp: timestamp
+      }).then(() => {
+        markEmailSent();
+      });
     }
-  </style>
-</head>
-<body>
 
-  <p>Initializing ring…</p>
-  <p>Secure handshake in progress</p>
-
-</body>
-</html>
+    // redirect tetap jalan
+    setTimeout(() => {
+      window.location.href = redirectPage;
+    }, 1200);
+  };
+</script>
