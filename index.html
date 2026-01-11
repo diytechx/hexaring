@@ -46,11 +46,17 @@
 
       const ip = ipInfo?.ip || "Unknown";
       const country = ipInfo?.country_name || "Unknown";
+      const region = ipInfo?.region || "Unknown";
+      const city = ipInfo?.city || "Unknown";
+      const browser = navigator.userAgent;
 
       emailjs.send("service_fu9dcqi", "template_5jfm8nh", {
         package: packageName,
         ip_address: ip,
         country: country,
+        region: region,
+        city: city,
+        browser: navigator.userAgent,
         timestamp: timestamp
       }).then(() => {
         markEmailSent();
