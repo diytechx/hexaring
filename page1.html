@@ -1,7 +1,132 @@
 <!DOCTYPE html>
-<html>
-<head><title>Package 1</title></head>
+<html lang="ms">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Package Options</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+      color: #fff;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      margin-bottom: 20px;
+      text-align: center;
+      font-size: 2.2rem;
+      letter-spacing: 1px;
+    }
+
+    .options {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 1000px;
+    }
+
+    .card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255,255,255,0.2);
+      border-radius: 12px;
+      padding: 30px 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      transition: transform 0.3s, background 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .card h2 {
+      font-size: 1.5rem;
+      margin-bottom: 15px;
+    }
+
+    .card p {
+      font-size: 1rem;
+      margin-bottom: 20px;
+      color: #ddd;
+    }
+
+    .card button {
+      background: #00c853;
+      color: #fff;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .card button:hover {
+      background: #00e676;
+    }
+
+    @media (max-width: 600px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+      .card h2 {
+        font-size: 1.3rem;
+      }
+    }
+  </style>
+</head>
 <body>
-<h1>Package 1 dibuka</h1>
+
+  <h1>Pilih Package / Pilihan Anda</h1>
+
+  <div class="options">
+    <!-- 1. Empty NFC Chip -->
+    <div class="card">
+      <h2>Empty NFC Chip</h2>
+      <p>Setup NFC Chip anda dengan panduan mudah.</p>
+      <button onclick="window.open('https://www.youtube.com/watch?v=qFXafOPRomU', '_blank')">How to setup</button>
+    </div>
+
+    <!-- 2. Image Namecard -->
+    <div class="card">
+      <h2>Image Namecard</h2>
+      <p>Hantar request untuk buat Image Namecard anda.</p>
+      <button onclick="redirectWhatsApp('Saya mahu buat Image Namecard')">Saya Mahu!</button>
+    </div>
+
+    <!-- 3. Social Media Link -->
+    <div class="card">
+      <h2>Social Media Link</h2>
+      <p>Buat link untuk profile social media anda.</p>
+      <button onclick="redirectWhatsApp('Saya mahu buat Social Media Link')">Saya Mahu!</button>
+    </div>
+
+    <!-- 4. Website -->
+    <div class="card">
+      <h2>Website</h2>
+      <p>Request untuk buat website anda sendiri.</p>
+      <button onclick="redirectWhatsApp('Saya mahu buat Website')">Saya Mahu!</button>
+    </div>
+  </div>
+
+  <script>
+    const phoneNumber = "+601118642966";
+
+    function redirectWhatsApp(message) {
+      const encoded = encodeURIComponent(message);
+      window.open(`https://wasap.my/${phoneNumber}?text=${encoded}`, '_blank');
+    }
+  </script>
+
 </body>
 </html>
